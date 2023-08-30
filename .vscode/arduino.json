@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "inmoov-hand.ino",
+    "port": "COM4"
+}
