@@ -1,39 +1,50 @@
+#include <Servo.h>
 
 
-const int THUMB_SENSOR_PIN = A0;
-const float VCC = 4.98;    // Measured voltage of Ardunio 5V line
-const float R_DIV = 300.0; // Measured resistance of 3.3k resistor
+int THUMB_SENSOR_PIN = A0;
+int INDEX_SENSOR_PIN = A1;
+int MIDDLE_SENSOR_PIN = A2;
+int RING_SENSOR_PIN = A3;
+int BABY_SENSOR_PIN = A4;
 
-const float STRAIGHT_RESISTANCE = 37300.0; // resistance when straight
-const float BEND_RESISTANCE = 90000.0;     // resistance at 90 deg
+int value;
 
-void setup()
-{
-    Serial.begin(9600);
-    pinMode(THUMB_SENSOR_PIN, INPUT);
+float angleAdjustment = 1;
+
+Servo THUMB_MOTOR;
+Servo INDEX_MOTOR;
+Servo MIDDLE_MOTOR;
+Servo RING_MOTOR;
+Servo BABY_MOTOR;
+
+
+void setup() {
+  THUMB_MOTOR.attach(2);
+  INDEX_MOTOR.attach(3);
+  MIDDLE_MOTOR.attach(4);
+  RING_MOTOR.attach(5);
+  BABY_MOTOR.attach(6);
+  Serial.begin(9600);
+  pinMode(THUMB_SENSOR_PIN, INPUT);
+  pinMode(INDEX_SENSOR_PIN, INPUT);
+  pinMode(MIDDLE_SENSOR_PIN, INPUT);
+  pinMode(RING_SENSOR_PIN, INPUT);
+  pinMode(BABY_SENSOR_PIN, INPUT);
 }
 
-float getRegistance(float sensorValue)
-{
-    float flexV = sensorValue * VCC / 1023.0;
-    float flexR = R_DIV * (VCC / flexV - 1.0);
 
-    return flexR;
-}
+void loop() {
+  float thumbSensor = analogRead(THUMB_SENSOR_PIN);
+  float indexSensor = analogRead(INDEX_SENSOR_PIN);
+  float middleSensor = analogRead(MIDDLE_SENSOR_PIN);
+  float ringSensor = analogRead(RING_SENSOR_PIN);
+  float babySensor = analogRead(BABY_SENSOR_PIN);
 
-float getAngle(float registance)
-{
-    float angle = map(registance, STRAIGHT_RESISTANCE, BEND_RESISTANCE, 0, 90.0);
-
-    return angle;
-}
-
-void loop()
-{
-    float thumbSensor = analogRead(THUMB_SENSOR_PIN);
-
-    Serial.println(String(thumbSensor));
-    Serial.println(String(getRegistance(thumbSensor)) + "ohms");
-    Serial.println(String(getAngle(getRegistance(thumbSensor))) + "degrees");
-    delay(500);
+  Serial.println(thumbSensor);
+  
+  THUMB_MOTOR.write(thumbSensor * angleAdjustment);
+  INDEX_MOTOR.write(indexSensor * angleAdjustment);
+  MIDDLE_MOTOR.write(middleSensor * angleAdjustment);
+  RING_MOTOR.write(ringSensor * angleAdjustment);
+  BABY_MOTOR.write(babySensor * angleAdjustment);
 }
