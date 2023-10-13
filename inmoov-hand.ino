@@ -42,9 +42,9 @@ void loop() {
 
   Serial.println(thumbSensor);
   
-  THUMB_MOTOR.write(thumbSensor * angleAdjustment);
-  INDEX_MOTOR.write(indexSensor * angleAdjustment);
-  MIDDLE_MOTOR.write(middleSensor * angleAdjustment);
-  RING_MOTOR.write(ringSensor * angleAdjustment);
-  BABY_MOTOR.write(babySensor * angleAdjustment);
+  THUMB_MOTOR.write(1023 - (thumbSensor * angleAdjustment));
+  INDEX_MOTOR.write(1023 - (indexSensor * angleAdjustment));
+  MIDDLE_MOTOR.write(1023 - (middleSensor * angleAdjustment));
+  RING_MOTOR.write(1023 - (ringSensor * angleAdjustment));
+  BABY_MOTOR.write(1023 - (babySensor * angleAdjustment));
 }
